@@ -3,7 +3,7 @@
 (use 'overtone.live)
 
 ;; We use a saw-wave that we defined in the oscillators tutorial
-(definst saw-wave [freq 440 attack 0.01 sustain 0.1 release 0.01 vol 0.4] 
+(definst saw-wave [freq 440 attack 0.01 sustain 0.1 release 0.01 vol 0.8] 
   (* (env-gen (lin-env attack sustain release) 1 1 0 1 FREE)
      (saw freq)
      vol))
@@ -22,7 +22,6 @@
         (apply-at (nome (inc beat)) looper nome sound [])))
 
 (defn mario-theme [m beat-num]
-  (let [time (now)]
     (at (m (+ 0 beat-num)) (saw-by-note :E4))
     (at (m (+ 1 beat-num)) (saw-by-note :E4))
     (at (m (+ 3 beat-num)) (saw-by-note :E4))
@@ -50,7 +49,7 @@
     (at (m (+ 43 beat-num)) (saw-by-note :E5))
     (at (m (+ 44 beat-num)) (saw-by-note :F5))
     (at (m (+ 45 beat-num)) (saw-by-note :D5))
-))
+)
 
 
 (def quarter-note 150)
