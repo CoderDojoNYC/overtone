@@ -15,41 +15,51 @@
 (defn play-chord [a-chord]
   (doseq [note a-chord] (saw-by-note note)))
 
-(def note-gap 150)
+; this function will play our sound at whatever tempo we've set our metronome to 
+(defn looper [nome sound]    
+    (let [beat (nome)]
+        (at (nome beat) (sound))
+        (apply-at (nome (inc beat)) looper nome sound [])))
 
-(defn mario-theme []
+(defn mario-theme [m beat-num]
   (let [time (now)]
-    (at time (saw-by-note :E4))
-    (at (+ note-gap time) (saw-by-note :E4))
-    (at (+ (* 3 note-gap) time) (saw-by-note :E4))
-    (at (+ (* 5 note-gap) time) (saw-by-note :C4))
-    (at (+ (* 6 note-gap) time) (saw-by-note :E4))
-    (at (+ (* 8 note-gap) time) (saw-by-note :G4))
-    (at (+ (* 12 note-gap) time) (saw-by-note :G3))
+    (at (m (+ 0 beat-num)) (saw-by-note :E4))
+    (at (m (+ 1 beat-num)) (saw-by-note :E4))
+    (at (m (+ 3 beat-num)) (saw-by-note :E4))
+    (at (m (+ 5 beat-num)) (saw-by-note :C4))
+    (at (m (+ 6 beat-num)) (saw-by-note :E4))
+    (at (m (+ 8 beat-num)) (saw-by-note :G4))
+    (at (m (+ 12 beat-num)) (saw-by-note :G3))
 
-    (at (+ (* 16 note-gap) time) (saw-by-note :C5))
-    (at (+ (* 19 note-gap) time) (saw-by-note :G4))
-    (at (+ (* 22 note-gap) time) (saw-by-note :E4))
-    (at (+ (* 25 note-gap) time) (saw-by-note :A4))
+    (at (m (+ 16 beat-num)) (saw-by-note :C5))
+    (at (m (+ 19 beat-num)) (saw-by-note :G4))
+    (at (m (+ 22 beat-num)) (saw-by-note :E4))
+    (at (m (+ 25 beat-num)) (saw-by-note :A4))
 
-    (at (+ (* 27 note-gap) time) (saw-by-note :B4))
-    (at (+ (* 29 note-gap) time) (saw-by-note :Bb4))
-    (at (+ (* 30 note-gap) time) (saw-by-note :A4))
-    (at (+ (* 32 note-gap) time) (saw-by-note :G4))
-    (at (+ (* 33.333 note-gap) time) (saw-by-note :C5))
-    (at (+ (* 34.666 note-gap) time) (saw-by-note :E5))
+    (at (m (+ 27 beat-num)) (saw-by-note :B4))
+    (at (m (+ 29 beat-num)) (saw-by-note :Bb4))
+    (at (m (+ 30 beat-num)) (saw-by-note :A4))
+    (at (m (+ 32 beat-num)) (saw-by-note :G4))
+    (at (m (+ 33.333 beat-num)) (saw-by-note :C5))
+    (at (m (+ 34.666 beat-num)) (saw-by-note :E5))
 
-    (at (+ (* 36 note-gap) time) (saw-by-note :A5))
-    (at (+ (* 38 note-gap) time) (saw-by-note :F5))
-    (at (+ (* 39 note-gap) time) (saw-by-note :G5))
-    (at (+ (* 41 note-gap) time) (saw-by-note :E5))
-    (at (+ (* 43 note-gap) time) (saw-by-note :E5))
-    (at (+ (* 44 note-gap) time) (saw-by-note :F5))
-    (at (+ (* 45 note-gap) time) (saw-by-note :D5))
+    (at (m (+ 36 beat-num)) (saw-by-note :A5))
+    (at (m (+ 38 beat-num)) (saw-by-note :F5))
+    (at (m (+ 39 beat-num)) (saw-by-note :G5))
+    (at (m (+ 41 beat-num)) (saw-by-note :E5))
+    (at (m (+ 43 beat-num)) (saw-by-note :E5))
+    (at (m (+ 44 beat-num)) (saw-by-note :F5))
+    (at (m (+ 45 beat-num)) (saw-by-note :D5))
 ))
 
 
+(def quarter-note 150)
+(def kick (sample (freesound-path 2086)))
+(def m (metronome 95))
+(def m-four-x (metronome (* 95 4)))
+
 (defn -main []
-    (mario-theme)
+    (mario-theme m-four-x (m-four-x))
+    (looper m kick)
 )
 
