@@ -16,12 +16,16 @@
   (doseq [note a-chord] (saw-by-note note)))
 
 ; this function will play our sound at whatever tempo we've set our metronome to 
-(defn looper [nome sound]    
-    (let [beat (nome)]
-        (at (nome beat) (sound))
-        (apply-at (nome (inc beat)) looper nome sound [])))
+(defn looper [nome sound current-beat increment final-beat]
+    (let [beat-time (nome current-beat)]
+        (at beat-time (sound))
+	(when (> final-beat current-beat)
+	 (looper nome sound (+ current-beat increment) increment final-beat)
+        )))
 
 (defn mario-theme [m beat-num]
+    (println 'mario-theme)
+    (println beat-num)
     (at (m (+ 0 beat-num)) (saw-by-note :E4))
     (at (m (+ 1 beat-num)) (saw-by-note :E4))
     (at (m (+ 3 beat-num)) (saw-by-note :E4))
@@ -52,13 +56,23 @@
 )
 
 
-(def quarter-note 150)
 (def kick (sample (freesound-path 2086)))
-(def m (metronome 95))
-(def m-four-x (metronome (* 95 4)))
+(definst noisey [freq 420 attack 0.004 sustain 0.1 release 0.04 vol 0.15] 
+  (* (env-gen (lin-env attack sustain release) 1 1 0 1 FREE)
+     (white-noise) ; also have (white-noise) and others...
+     vol))
+(definst noisey-p [freq 420 attack 0.004 sustain 0.1 release 0.04 vol 0.4] 
+  (* (env-gen (lin-env attack sustain release) 1 1 0 1 FREE)
+     (pink-noise) ; also have (white-noise) and others...
+     vol))
+
+(def m (metronome (* 95 4)))
 
 (defn -main []
-    (mario-theme m-four-x (m-four-x))
-    (looper m kick)
+    (let [start-beat (+ (m) 8)]
+       (mario-theme m start-beat)
+       (looper m noisey-p (+ start-beat 4) 8 (+ start-beat 44))
+       (looper m noisey start-beat 8 (+ start-beat 44))
+    )
 )
 
