@@ -7,6 +7,7 @@ Overtone is awesome, read about installing it here [https://github.com/overtone/
 - **Mac**: Setup instructions can be located [here](https://github.com/CoderDojoNYC/overtone/tree/master/installers/mac).
 
 ### Setup for Windows
+
   Download http://bit.ly/overtone-repl1
   Extract All the files onto a local drive
   Find the bin/clj-1.bat with Windows Explorer
