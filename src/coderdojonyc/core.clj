@@ -3,44 +3,45 @@
 (use 'overtone.live)
 (use 'coderdojonyc.lib)
 
+(def score [[0 :E4]
+            [1 :E4]
+            [3 :E4]
+            [5 :C4]
+            [6 :E4]
+            [8 :G4]
+            [12 :G3]
+            [16 :C5]
+            [19 :G4]
+            [22 :E4]
+            [25 :A4]
+            [27 :B4]
+            [29 :Bb4]
+            [30 :A4]
+            [32 :G4]
+            [33.333 :C5]
+            [34.666 :E5]
+            [36 :A5]
+            [38 :F5]
+            [39 :G5]
+            [41 :E5]
+            [43 :E5]
+            [44 :F5]
+            [45 :D5]])
+
+(defn play-instrument-at [m start-beat instrument beat note]
+  (at (m (+ beat start-beat)) (saw-by-note note)))
+
 (defn mario-theme [m beat-num]
-    (at (m (+ 0 beat-num)) (saw-by-note :E4))
-    (at (m (+ 1 beat-num)) (saw-by-note :E4))
-    (at (m (+ 3 beat-num)) (saw-by-note :E4))
-    (at (m (+ 5 beat-num)) (saw-by-note :C4))
-    (at (m (+ 6 beat-num)) (saw-by-note :E4))
-    (at (m (+ 8 beat-num)) (saw-by-note :G4))
-    (at (m (+ 12 beat-num)) (saw-by-note :G3))
+  (doseq [pair score]
+    (let [[beat note] pair]
+      (play-instrument-at m beat-num saw-by-note beat note))))
 
-    (at (m (+ 16 beat-num)) (saw-by-note :C5))
-    (at (m (+ 19 beat-num)) (saw-by-note :G4))
-    (at (m (+ 22 beat-num)) (saw-by-note :E4))
-    (at (m (+ 25 beat-num)) (saw-by-note :A4))
-
-    (at (m (+ 27 beat-num)) (saw-by-note :B4))
-    (at (m (+ 29 beat-num)) (saw-by-note :Bb4))
-    (at (m (+ 30 beat-num)) (saw-by-note :A4))
-    (at (m (+ 32 beat-num)) (saw-by-note :G4))
-    (at (m (+ 33.333 beat-num)) (saw-by-note :C5))
-    (at (m (+ 34.666 beat-num)) (saw-by-note :E5))
-
-    (at (m (+ 36 beat-num)) (saw-by-note :A5))
-    (at (m (+ 38 beat-num)) (saw-by-note :F5))
-    (at (m (+ 39 beat-num)) (saw-by-note :G5))
-    (at (m (+ 41 beat-num)) (saw-by-note :E5))
-    (at (m (+ 43 beat-num)) (saw-by-note :E5))
-    (at (m (+ 44 beat-num)) (saw-by-note :F5))
-    (at (m (+ 45 beat-num)) (saw-by-note :D5))
-)
-
-
-(def kick (sample (freesound-path 2086)))
-(definst noisey [freq 420 attack 0.004 sustain 0.1 release 0.04 vol 0.15] 
+(definst noisey [freq 420 attack 0.004 sustain 0.1 release 0.04 vol 0.15]
   (* (env-gen (lin-env attack sustain release) 1 1 0 1 FREE)
-     (white-noise) ; also have (white-noise) and others...
+     (white-noise)               ; also have (white-noise) and others...
      vol))
 
-(definst noisey-p [freq 420 attack 0.004 sustain 0.1 release 0.04 vol 0.4] 
+(definst noisey-p [freq 420 attack 0.004 sustain 0.1 release 0.04 vol 0.4]
   (* (env-gen (lin-env attack sustain release) 1 1 0 1 FREE)
      (pink-noise) ; also have (white-noise) and others...
      vol))
@@ -54,4 +55,3 @@
        (looper m noisey start-beat 8 (+ start-beat 44))
     )
 )
-
