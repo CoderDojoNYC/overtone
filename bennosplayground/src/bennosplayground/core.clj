@@ -4,8 +4,6 @@
 (use 'bennosplayground.lib)
 
 (defn mario-theme [m beat-num]
-    (println 'mario-theme)
-    (println beat-num)
     (at (m (+ 0 beat-num)) (saw-by-note :E4))
     (at (m (+ 1 beat-num)) (saw-by-note :E4))
     (at (m (+ 3 beat-num)) (saw-by-note :E4))
