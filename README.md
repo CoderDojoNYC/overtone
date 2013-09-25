@@ -8,6 +8,7 @@ Overtone is awesome, read about installing it here [https://github.com/overtone/
 
 ### Setup for Windows
 
+```
   Download http://bit.ly/overtone-repl1
   Extract All the files onto a local drive
   Find the bin/clj-1.bat with Windows Explorer
@@ -16,7 +17,7 @@ Overtone is awesome, read about installing it here [https://github.com/overtone/
   Type at the prompt:
   (+ 1 2)
   (use 'overtone.live)
-  
+```  
 
 
 ### Check out the examples in XXXXXX
