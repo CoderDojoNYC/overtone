@@ -3,35 +3,37 @@
 (use 'overtone.live)
 (use 'coderdojonyc.lib)
 
-(def score [[0 :E4]
-            [1 :E4]
-            [3 :E4]
-            [5 :C4]
-            [6 :E4]
-            [8 :G4]
-            [12 :G3]
-            [16 :C5]
-            [19 :G4]
-            [22 :E4]
-            [25 :A4]
-            [27 :B4]
-            [29 :Bb4]
-            [30 :A4]
-            [32 :G4]
-            [33.333 :C5]
-            [34.666 :E5]
-            [36 :A5]
-            [38 :F5]
-            [39 :G5]
-            [41 :E5]
-            [43 :E5]
-            [44 :F5]
-            [45 :D5]])
+;; vector of [beat note] pairs. beats are absolute.
+(def mario-theme [[0 :E4]
+                  [1 :E4]
+                  [3 :E4]
+                  [5 :C4]
+                  [6 :E4]
+                  [8 :G4]
+                  [12 :G3]
+                  [16 :C5]
+                  [19 :G4]
+                  [22 :E4]
+                  [25 :A4]
+                  [27 :B4]
+                  [29 :Bb4]
+                  [30 :A4]
+                  [32 :G4]
+                  [33.333 :C5]
+                  [34.666 :E5]
+                  [36 :A5]
+                  [38 :F5]
+                  [39 :G5]
+                  [41 :E5]
+                  [43 :E5]
+                  [44 :F5]
+                  [45 :D5]])
 
+;; this interface could be cleaned up
 (defn play-instrument-at [m start-beat instrument beat note]
   (at (m (+ beat start-beat)) (saw-by-note note)))
 
-(defn mario-theme [m beat-num]
+(defn play-song [score m beat-num]
   (doseq [pair score]
     (let [[beat note] pair]
       (play-instrument-at m beat-num saw-by-note beat note))))
@@ -50,7 +52,7 @@
 
 (defn -main []
     (let [start-beat (+ (m) 8)]
-       (mario-theme m start-beat)
+       (play-song mario-theme m start-beat)
        (looper m noisey-p (+ start-beat 4) 8 (+ start-beat 44))
        (looper m noisey start-beat 8 (+ start-beat 44))
     )
