@@ -4,7 +4,7 @@ Overtone is awesome, read about installing it here [https://github.com/overtone/
 
 ### Setup
 
-- **Mac**: Setup instructions can be located [here](https://github.com/CoderDojoNYC/overtone/tree/master/installers/mac).
+- **Mac**: Setup instructions can be located [here](https://github.com/CoderDojoNYC/overtone/blob/master/doc/mac-installation.mdown).
 
 ### Setup for Windows
 
