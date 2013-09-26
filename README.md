@@ -36,7 +36,7 @@ There are 10 musical sheets from different songs cut into pieces like a jigsaw p
     * Reload, Play and Compare with the youtube music
     * Loop back to the Edit
 
-2. PUBLISH
+2. PUBLISH (proposal. to be discussed/detailed)
 
   a. Record the music onto a WAV file (using Overtone)
   b. Write up: title, description of the experience (what I like, didn't like, improvements?), author
@@ -63,7 +63,7 @@ There are 10 musical sheets from different songs cut into pieces like a jigsaw p
 
 Instructions are located [here](https://github.com/CoderDojoNYC/overtone/blob/master/doc/mac-installation.mdown).
 
-##### Detailed Setup Instructions for Windows
+##### Detailed Setup Instructions for Windows (obsolete... replaced by overtone-repl-windows.bat)
 
 ```
   Download http://bit.ly/overtone-repl1
@@ -87,7 +87,16 @@ a.
 (defonce metro (metronome 120))
 (metro)
 ```
-**EXPLANATION OF CODE GOES HERE**
+defonce allows the creation of global state at the root
+http://clojuredocs.org/clojure_core/clojure.core/defonce
+`metro` maintains the current tempo of the metronome.
+
+Try few more `(metro)` to see the current tempo value (always increasing)
+```
+(metro)
+(metro)
+(metro)
+```
 
 b.
 ```
@@ -97,14 +106,17 @@ b.
      (saw freq)
      vol))
  ```
+
+This defines the function `saw-wave()`, a triangular wave shape, based on a linear envelope.
+It has 5 parameters with their default values: 440 Hz for frequency and so on.
+
+
+c.
+```
+(defn play [music-note ticks]
+ (saw-wave (midi->hz (note music-note)) 0.01 (* 0.4 ticks)))
+```
 **EXPLANATION OF CODE GOES HERE**
- 
- c.
- ```
- (defn play [music-note ticks]
-  (saw-wave (midi->hz (note music-note)) 0.01 (* 0.4 ticks)))
- ```
- **EXPLANATION OF CODE GOES HERE**
 
 
 d.
