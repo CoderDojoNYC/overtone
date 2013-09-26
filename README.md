@@ -21,32 +21,34 @@ There are 10 musical sheets from different songs cut into pieces like a jigsaw p
 
 1. CREATE & EXPLORE
 
-     a. Select your song (just find the right musical sheet)
-         * Visit http://pianoitall.com (Piano It All).
-         * Click on the blue button "Browse Songs".
-         * Pick one song that you like the most and listen to the youtube to confirm.
-          * Download Musical Sheet (on the right of the youtube video)
-
-     b. Translate from the Musical Sheet to the MIDI Musical Letters
-          * Use the piano reference, MIDI reference: Letters A-G. Numbers: 2-8
-          * Result: List like [A5, B4, F#4, F4, G5]
-
-     c. Code into the script (edit, reload)
-          * Edit: Change the notes from the sample script
-          * Reload, Play and Compare with the youtube music
-          * Loop back to the Edit
+  a. Select your song (just find the right musical sheet)
+    * Visit http://pianoitall.com (Piano It All).
+    * Click on the blue button "Browse Songs".
+    * Pick one song that you like the most and listen to the youtube to confirm.
+    * Download Musical Sheet (on the right of the youtube video)
+    
+  b. Translate from the Musical Sheet to the MIDI Musical Letters
+    * Use the piano reference, MIDI reference: Letters A-G. Numbers: 2-8
+    * Result: List like [A5, B4, F#4, F4, G5]
+  
+  c. Code into the script (edit, reload)
+    * Edit: Change the notes from the sample script
+    * Reload, Play and Compare with the youtube music
+    * Loop back to the Edit
 
 2. PUBLISH
 
-      a. Record the music onto a WAV file (using Overtone)
-      b. Write up: title, description of the experience (what I like, didn't like, improvements?), author
-      c. Create a web page with this content (or use Blogger + Google Drive for WAV file)
+  a. Record the music onto a WAV file (using Overtone)
+  b. Write up: title, description of the experience (what I like, didn't like, improvements?), author
+  c. Create a web page with this content (or use Blogger + Google Drive for WAV file)
 
 3. SHARE
-      a. Play a short piece. Everyone has to guess
-      b. Play a longer piece. Again, see if someone can guess
-      c. Play the whole song. See if anyone can guess
-      
+  
+  a. Play a short piece. Everyone has to guess
+  b. Play a longer piece. Again, see if someone can guess
+  c. Play the whole song. See if anyone can guess
+  
+    
 ### The Details
 ---
 
