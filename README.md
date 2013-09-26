@@ -110,13 +110,34 @@ b.
 This defines the function `saw-wave()`, a triangular wave shape, based on a linear envelope.
 It has 5 parameters with their default values: 440 Hz for frequency and so on.
 
+Try the following:
+```
+(saw-wave)
+(saw-wave 440)
+(saw-wave 220)
+(saw-wave 880 0.01 2.0)
+```
 
 c.
 ```
 (defn play [music-note ticks]
  (saw-wave (midi->hz (note music-note)) 0.01 (* 0.4 ticks)))
 ```
-**EXPLANATION OF CODE GOES HERE**
+
+`play` takes a note, like :E5, and a duration in terms of tick, and will play a saw-wave with this data
+
+Try the following:
+```
+(note :A1)       ; return the MIDI note number
+(note :E5)
+
+(midi->hz 67)    ; return the Hz
+(midi->hz 1)
+
+(play :E4 2)
+(play :A4 4)
+```
+
 
 
 d.
@@ -130,14 +151,14 @@ d.
   (at (m (+ 6 beat-num)) (play :G4 2))
 )
 ```
- **EXPLANATION OF CODE GOES HERE**
-
+This defines a function named `minecraft-row1`, that can be called in the future
 
 e.
 ```
 (minecraft-row1 metro (metro))
 ```
- **EXPLANATION OF CODE GOES HERE**
+Now, we are calling the above function with the given metronome
+
 
 If everything worked, you should hear some music play. Okay, now let's make our own beats!
 
