@@ -255,6 +255,9 @@ Continue exploring and playing around with different durations, notes and timing
 * Note Durations
   * http://library.thinkquest.org/15413/media/images/note_values.gif
   * http://www.jazclass.aust.com/basicth/bt111.gif 
+* MIDI
+  * http://www.midimountain.com/midi/midi_note_numbers.html
+  * http://computer-music.postbit.com/upload/131/posts/midi-notes-numbers.gif
 
 
 ## Credits
