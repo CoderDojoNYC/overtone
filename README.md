@@ -224,6 +224,10 @@ First the `A4` note will play, then the `B4`, followed by the `C4` note.
   * Create your own original music piece
   * Take an existing piece and translate it into code and remix it!
   
+- Use a text editor of your choice. We packaged a few, but [Sublime](http://www.sublimetext.com/) is recommended.
+- Load overtone and type `(load-file ~/path-to-file/file-name)` to run your music program.
+
+
 #### Super Mario
 
 Instructions?????????????????  
