@@ -79,7 +79,7 @@ Instructions are located [here](https://github.com/CoderDojoNYC/overtone/blob/ma
 
 
 #### Experimentation
-Start off by downloading an overtone example (LINK GOES HERE)
+Start off by replicating your first overtone example <a href="https://github.com/CoderDojoNYC/overtone/blob/master/src/coderdojonyc/first.clj">First example</a>
 
 Now type the following into overtone
 
