@@ -1,7 +1,8 @@
 (ns coderdojonyc.core
-    (:gen-class))
-(use 'overtone.live)
-(use 'coderdojonyc.lib)
+    [:use overtone.live
+          coderdojonyc.lib])
+;(use 'overtone.live)
+;(use 'coderdojonyc.lib)
 
 ;; vector of [beat note] pairs. beats are absolute.
 (def mario-theme [[0 :E4]
