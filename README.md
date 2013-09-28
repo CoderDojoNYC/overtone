@@ -38,16 +38,16 @@ There are 10 musical sheets from different songs cut into pieces like a jigsaw p
 
 2. PUBLISH (proposal. to be discussed/detailed)
 
-  a. Record the music onto a WAV file (using Overtone)
+   * Record the music onto a WAV file (using Overtone)
      https://github.com/overtone/overtone/wiki/Recording)
-  b. Write up: title, description of the experience (what I like, improvements?)
-  c. Create a web page with this content (or use Blogger + Google Drive for WAV file)
+   * Write up: title, description of the experience (what I like, improvements?)
+   * Create a web page with this content (or use Blogger + Google Drive for WAV file)
 
 3. SHARE
   
-   * a. Play a short piece. Everyone has to guess
-   * b. Play a longer piece. Again, see if someone can guess
-   * c. Play the whole song. See if anyone can guess
+   * Play a short piece. Everyone has to guess
+   * Play a longer piece. Again, see if someone can guess
+   * Play the whole song. See if anyone can guess
   
     
 ### The Details
