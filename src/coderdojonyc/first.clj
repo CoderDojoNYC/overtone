@@ -46,3 +46,21 @@
  
 ;; Test
 (minecraft-row1 metro (metro))
+
+ 
+(defn minecraft-row2 [m beat-num]
+    (at (m (+ 0 beat-num)) (play :G4 1))
+    (at (m (+ 1 beat-num)) (play :G4 1))
+    (at (m (+ 2 beat-num)) (play :G4 1))
+    (at (m (+ 3 beat-num)) (play :A4 1))
+    (at (m (+ 4 beat-num)) (play :B4 2))
+    (at (m (+ 6 beat-num)) (play :B4 2))
+)
+
+
+(defn minecraft [m beat-num]
+    (minecraft-row1 m beat-num)
+    (minecraft-row2 m (+ beat-num 8))
+)
+ 
+;; (minecraft)
