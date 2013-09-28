@@ -138,6 +138,9 @@
 ;; (defn play [music-note ticks]
 ;;  (piano (note music-note))
 ;; )
- 
 
+;; Record song!
+
+(recording-start "./minecraft.wav")
 (minecraft metro (metro))
+(recording-stop)
