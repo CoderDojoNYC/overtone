@@ -1,3 +1,20 @@
+;;
+;; Minecraft. Part 1. Right hand.
+;; Based on: https://www.youtube.com/watch?v=0v5tE9fwqQo
+;; 
+;; MIDI reference for notes
+;; http://computer-music.postbit.com/upload/131/posts/midi-notes-numbers.gif
+;; http://www.midimountain.com/midi/midi_note_numbers.html
+;;
+;; Musical Theory (using JS)
+;; https://github.com/saebekassebil/teoria
+;;
+;; At the bottom, added customization for "playing" a string "pluck" effect and a piano
+;;
+;; Try clojure:  http://tryclj.com/
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (ns coderdojonyc.minecraft
   (:gen-class))
 
