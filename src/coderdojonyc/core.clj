@@ -1,5 +1,4 @@
-(ns coderdojonyc.core
-    (:gen-class))
+(ns coderdojonyc.core)
 (use 'overtone.live)
 (use 'coderdojonyc.lib)
 

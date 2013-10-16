@@ -5,4 +5,7 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :main coderdojonyc.core
   :dependencies [[org.clojure/clojure "1.5.1"]
-                 [overtone "0.8.1"]])
+                 [overtone "0.8.1" :exclusions [org.clojure/clojure]]
+                 [org.clojure/data.json "0.2.3"]
+                 [lein-light-nrepl "0.0.1"]]
+  :repl-options {:nrepl-middleware [lighttable.nrepl.handler/lighttable-ops]})
