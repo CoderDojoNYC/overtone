@@ -10,49 +10,46 @@
   "A time offset used for scheduling within a song."
   (atom 0))
 
-(def ^:dynamic *sync-funs*
-  "The functions that should be rewritten to be synchronous when used inside a
-   dosong/loopsong expression"
+(def ^:dynamic *sched-funs*
+  "Functions name symbols that should be rewritten to be (wait-beats) scheduled
+   when used inside a dosong/loopsong expression"
   #{'println})
 
-(defn makefn
-  "Return code (a list) as the body in an anonymous function."
-  [code]
-  `(fn [] ~code))
-
-(defn sync-fun?
+(defn sched-fun?
   "Returns true if function named by symbol fun should be rewritten to be
-  synchronous. Returns true when fun refers to an function defined by definst or
-  defsynth, or if the symbol is found in the *sync-funs* set."
+  (wait-beat) scheduled. Returns true when fun refers to a function that was
+  defined by definst or defsynth, or if the symbol is found in the *sched-funs*
+  set."
 
   [fun]
   (let [ftype (:type (meta (ns-resolve *ns* fun)))]
     (or (= :overtone.studio.inst/instrument ftype)
         (= :overtone.studio.synth/synth ftype)
-        (contains? *sync-funs* fun))))
+        (contains? *sched-funs* fun))))
 
 (defn wait
   "For use inside dosong/loopsong macro, "
   [num]
   (swap! *waiting-time* (partial + num)))
 
-(defn make-sync [fun-exp]
-  "Rewrite the "
+(defn make-sched [fun-exp]
+  "Rewrite the the code in fun-exp as scheduled to execute in the future
+  *waiting-time* beats from now."
   `(~wait-beats global-metro (deref *waiting-time*)
         ~(first fun-exp) ~@(rest fun-exp)))
 
 (defn -dosong-helper [body]
-  "Walk the syntax tree of body, rewriting functions as synchronous if they're
-   marked to be according to *sync-funs*."
+  "Walk the syntax tree of body, rewriting functions as scheduled if they're
+   sched-fun? says they should be."
 
-  ;; was originally using lazy-seq for recursion, but the binding to *sync-funs*
-  ;; (in loopsong) was getting lost, which makes sense, I think, 'cause
-  ;; (binding) bindings are thread-local.
+  ;; was originally using lazy-seq for recursion, but the binding to
+  ;; *sched-funs* (in loopsong) was getting lost, which makes sense, I think,
+  ;; 'cause (binding) bindings are thread-local.
 
   (when-let [[head & xs] body]
     (cond
-     (and (seq? head) (sync-fun? (first head)))
-     (cons (make-sync head) (-dosong-helper xs))
+     (and (seq? head) (sched-fun? (first head)))
+     (cons (make-sched head) (-dosong-helper xs))
 
      (seq? head) (cons ;; recur on next expression
                   (cons (first head) ;; recur on rest of this expression
@@ -62,10 +59,10 @@
      :else (cons head (-dosong-helper xs)))))
 
 (defmacro dosong
-  "A 'pause-ible' do form. Use the (wait n) function to indicate a pause of n
-  beats. Any functions deemed 'syncrhonous' (by sync-fun?) that follow
-  the (wait) invocation will wait n beats to eval. Functions not deemed
-  'synchronous' are evaluated as usual.
+  "A 'pausable' do form. Use the (wait n) function to indicate a pause of n
+  beats. Any functions deemed schedulable by sched-fun? that follow the (wait)
+  invocation will wait n beats to eval. Functions not deemed schedulable are
+  evaluated as usual.
 
   (dosong
    (saw-wave 100)
@@ -87,7 +84,7 @@
 
   the saw-wave calls get rewritten because saw-wave was defined using definst,
   and the println call gets rewritten because 'println appears in the
-  *sync-funs* set.
+  *sched-funs* set.
 
   Another example, demonstrating that control structures are preserved.
 
@@ -113,9 +110,11 @@
                       ~@(-dosong-helper body))))
 
 (defmacro loopsong [& body]
-  "Note: Seems to break when the total song length is less than a beat."
+  " Same as dosong, but loops foerever.
 
-  ;; bind body to a function named recur-xxx, mark recur-xxx as synchronous,
+   Note: Seems to break when the total song length is less than a beat."
+
+  ;; bind body to a function named recur-xxx, mark recur-xxx as schedulable,
   ;; then append a call to recur-xxx to the end of body before running
   ;; -dosong-helper on body. dosong will rewrite the recursive call with
   ;; (wait-beats) so it gets called after everything else in the song.
