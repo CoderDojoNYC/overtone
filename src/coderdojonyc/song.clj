@@ -25,8 +25,10 @@
 
 (defn wait
   "For use inside dosong/loopsong macro, "
-  [num beat-offset]
-  (swap! beat-offset (partial + num)))
+  ([num]
+     (throw (Exception. "(wait) can only be used inside (dosong) or (loopsong)")))
+  ([num beat-offset]
+     (swap! beat-offset (partial + num))))
 
 (defn make-sched [fun-exp offset-sym]
   "Rewrite the the code in fun-exp as scheduled to execute in the future
@@ -69,7 +71,7 @@
                  ~@(schedule-code body beat-offset)
                  (if ~looping?
                    (wait-beats global-metro @~beat-offset fun#))))]
-       (apply-next-beat global-metro fun#))))
+       (apply-next-bar global-metro fun#))))
 
 (defmacro loopsong [& body]
   (make-scheduled-expression body true))
