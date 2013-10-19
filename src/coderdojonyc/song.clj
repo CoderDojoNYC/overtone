@@ -6,10 +6,6 @@
   "The implicit metronome used by the functions that follow."
   (metronome 120))
 
-(def ^:dynamic *waiting-time*
-  "A time offset used for scheduling within a song."
-  (atom 0))
-
 (def ^:dynamic *sched-funs*
   "Functions name symbols that should be rewritten to be (wait-beats) scheduled
    when used inside a dosong/loopsong expression"
@@ -29,18 +25,20 @@
 
 (defn wait
   "For use inside dosong/loopsong macro, "
-  [num]
-  (swap! *waiting-time* (partial + num)))
+  [num beat-offset]
+  (swap! beat-offset (partial + num)))
 
-(defn make-sched [fun-exp]
+(defn make-sched [fun-exp offset-sym]
   "Rewrite the the code in fun-exp as scheduled to execute in the future
-  *waiting-time* beats from now."
-  `(~wait-beats global-metro (deref *waiting-time*)
+  beat-offset beats from now."
+  `(wait-beats global-metro @~offset-sym
         ~(first fun-exp) ~@(rest fun-exp)))
 
-(defn -dosong-helper [body]
-  "Walk the syntax tree of body, rewriting functions as scheduled if they're
-   sched-fun? says they should be."
+(defn schedule-code [body offset-sym]
+  "Walk the syntax tree of body, rewriting functions as scheduled if sched-fun?
+   says they should be. offset-sym is the symbol to use for the beat-offset
+   counter atom. I have a hard time reasoning about recursive macros so I found
+   the extra vars preferable to writing this all in a macro."
 
   ;; was originally using lazy-seq for recursion, but the binding to
   ;; *sched-funs* (in loopsong) was getting lost, which makes sense, I think,
@@ -49,16 +47,34 @@
   (when-let [[head & xs] body]
     (cond
      (and (seq? head) (sched-fun? (first head)))
-     (cons (make-sched head) (-dosong-helper xs))
+     (cons (make-sched head offset-sym) (schedule-code xs offset-sym))
+
+     (= (first head) 'wait)
+     (cons `(wait ~(second head) ~offset-sym)
+           (schedule-code xs offset-sym))
 
      (seq? head) (cons ;; recur on next expression
                   (cons (first head) ;; recur on rest of this expression
-                        (-dosong-helper (rest head)))
-                  (-dosong-helper xs))
+                        (schedule-code (rest head) offset-sym))
+                  (schedule-code xs offset-sym))
 
-     :else (cons head (-dosong-helper xs)))))
+     :else (cons head (schedule-code xs offset-sym)))))
 
-(defmacro dosong
+(defn make-scheduled-expression [body looping?]
+  "Rewrite the code in body to be scheduled. If looping? is truthy the
+   code will be inifintely recursive."
+  (let [beat-offset (gensym "beat-offset-")]
+    `(letfn [(fun# []
+               (let [~beat-offset (atom 0)]
+                 ~@(schedule-code body beat-offset)
+                 (if ~looping?
+                   (wait-beats global-metro @~beat-offset fun#))))]
+       (apply-next-beat global-metro fun#))))
+
+(defmacro loopsong [& body]
+  (make-scheduled-expression body true))
+
+(defmacro dosong [& body]
   "A 'pausable' do form. Use the (wait n) function to indicate a pause of n
   beats. Any functions deemed schedulable by sched-fun? that follow the (wait)
   invocation will wait n beats to eval. Functions not deemed schedulable are
@@ -73,14 +89,12 @@
 
   expands (approximately) into
 
-  (binding [*waiting-time* (atom 0)]
-    (apply-next-beat global-metro
-
-     (wait-beats global-metro @*waiting-time* saw-wave 100)
-     (wait 1) ;; bangs on *waiting-time*
-     (wait-beats global-metro @*waiting-time* saw-wave 200)
-     (wait 1)
-     (wait-beats global-metro @*waiting-time* println 'done)))
+  (let [beat-offset (atom 0)]
+    (wait-beats global-metro @beat-offset saw-wave 100)
+    (wait 1 beat-offset)
+    (wait-beats global-metro @beat-offset saw-wave 200)
+    (wait 1 beat-offset)
+    (wait-beats global-metro @beat-offset println 'done))
 
   the saw-wave calls get rewritten because saw-wave was defined using definst,
   and the println call gets rewritten because 'println appears in the
@@ -95,36 +109,11 @@
 
   expands into
 
-  (binding [*waiting-time* (atom 0)]
-    (apply-next-beat global-metro
-
-      (doseq [i (range 1 13)]
-        (wait-beats global-metro @*waiting-time* saw-wave (* i 50))
-        (wait (/ 2 i)))))
+  (let [beat-offset (atom 0)]
+    (doseq [i (range 1 13)]
+      (wait-beats global-metro @beat-offset saw-wave (* i 50))
+      (wait (/ 2 i) beat-offset)))
 
 "
 
-  [& body]
-  `(binding [*waiting-time* (atom 0)]
-     (~apply-next-beat global-metro
-                      ~@(-dosong-helper body))))
-
-(defmacro loopsong [& body]
-  " Same as dosong, but loops foerever.
-
-   Note: Seems to break when the total song length is less than a beat."
-
-  ;; bind body to a function named recur-xxx, mark recur-xxx as schedulable,
-  ;; then append a call to recur-xxx to the end of body before running
-  ;; -dosong-helper on body. dosong will rewrite the recursive call with
-  ;; (wait-beats) so it gets called after everything else in the song.
-
-  (let [fun-name (gensym "recur-")
-        time-syms (conj *sync-funs* fun-name)
-        code (binding [*sync-funs* time-syms]
-               `(binding [*waiting-time* (atom 0)]
-                  ~@(-dosong-helper
-                   (conj (apply vector body)  ;; add recursive call to
-                         (list fun-name)))))] ;; end of code
-    `(letfn [(~fun-name [] ~code)]
-       (~apply-next-bar global-metro ~fun-name))))
+  (make-scheduled-expression body false))
