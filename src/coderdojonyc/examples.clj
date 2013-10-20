@@ -1,5 +1,6 @@
 (ns coderdojonyc.examples
-  (:require [overtone.inst.drum :refer [kick noise-snare]]
+  (:require [overtone.core :refer [midi->hz]]
+            [overtone.inst.drum :refer [kick noise-snare]]
             [overtone.inst.synth :refer [rise-fall-pad ks1]]
             [coderdojonyc.song :refer [dosong wait loopsong]]))
 
